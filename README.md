@@ -17,6 +17,10 @@ In other scenarios, it can become a **kernel-backed stealthly communication pipe
 
 [simple stickman like pic representing the concept easily digestible, not trying too hard)
 
+If you can read it, anyone can read it, but only if they know what there looking for.
+A virtual xbox 360 controller changing LED by itself does not scream "covert channel". LED covert 
+
+
 ## How the channel works
 
 The PoC uses three LED values:
