@@ -1,0 +1,6 @@
+# Runtime captures and decoded InvisRing demo output
+/Src/Capture/
+
+# Python bytecode caches
+__pycache__/
+*.py[cod]
