@@ -1,18 +1,33 @@
 # InvisRing
 
-InvisRing is a Windows proof of concept for sending and receiving short messages through the LED state of a ScpVBus virtual Xbox 360 controller. The sender changes the virtual controller's LED state through the xusb22 device interface; a separate receiver process polls that state and decodes the symbols.
+**InvisRing** is a **Controller-as-a-covert** PoC that uses an **virtual Xbox 360 controller** as a  channel to store info via kernel drivers (one preinstalled, one signed). 
 
-This demonstrates a local shared-state communication channel that uses the controller stack. It does not demonstrate remote access, privilege escalation, kernel memory access, or that endpoint monitoring cannot observe the activity.
+## How communication works
+
+**InvisRing** creates the virtual Xbox 360 controller via **ScpVBus.sys**; a signed xbox 360 controller bus driver
+**InvisRing** changes the virtual controller's LED state through **xusb22.sys**; a pre-installed windows driver.
+
+From there, the LED acts as a **silent slowburn** for exfiltrated data. 
+
+In other scenarios, it can become a **kernel-backed stealthly communication pipeline** for multi-operator communication via vLED
+
+## Vulnerability Impact
+
+**Multi-Operator Communication** 
+
+[simple stickman like pic representing the concept easily digestible, not trying too hard)
 
 ## How the channel works
 
-The demo uses three LED values:
+The PoC uses three LED values:
 
 | Value | Meaning |
 | --- | --- |
 | `0x02` | Binary `0` |
 | `0x03` | Binary `1` |
 | `0x06` | Idle / symbol separator |
+
+Each message includes a small sync header, payload length, the utf-8 covert text, and a CRC check to catch corruption. The receiver logs the LED changes (see `Captures/Raw` after a run)
 
 Frames include a synchronization preamble, payload length, UTF-8 payload, and CRC. The receiver records observed LED transitions and decode results as JSON captures under `Src/Capture/`.
 
